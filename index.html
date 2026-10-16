@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Educativa - XIV Feria UPEA</title>
+    <link rel="stylesheet" href="css/codemirror.min.css">
+    <link rel="stylesheet" href="css/codemirror-dracula.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- OVERLAY PARA DISPOSITIVOS MÓVILES -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="gameApp.toggleMobileSidebar()"></div>
+
+    <!-- SIDEBAR DE NAVEGACIÓN -->
+    <sidebar id="app-sidebar" class="hidden">
+        <!-- LOGO INSTITUCIONAL OFICIAL UPEA EN LA PARTE SUPERIOR -->
+        <div class="sidebar-brand">
+            <img src="img/upea sistemas.png" alt="Logo UPEA Sistemas" class="sidebar-logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/21/Escudo_de_la_Universidad_Pública_de_El_Alto.png'">
+            <h2>UPEA - Sistemas</h2>
+            <p>XIV Feria de Ciencias 2026</p>
+        </div>
+
+        <!-- TARJETA DE USUARIO EN LA BARRA LATERAL -->
+        <div class="sidebar-user-card" id="sidebar-user-card">
+            <div class="user-avatar-circle" id="user-avatar">GQ</div>
+            <div class="user-card-info">
+                <div class="user-card-name" id="user-display">Gabriel Quispe</div>
+                <div class="user-card-role" id="user-role-display">Estudiante Regular</div>
+                <div class="user-card-sub" id="user-sub-display">RU: 20261234</div>
+            </div>
+        </div>
+
+        <!-- MENÚ DE OPCIONES LATERALES SIN EMOTICONOS -->
+        <ul class="sidebar-menu">
+            <li id="menu-inicio" class="active" onclick="gameApp.switchTab('inicio')">
+                <svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Inicio</span>
+            </li>
+            <li id="menu-materias" onclick="gameApp.switchTab('materias')">
+                <svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>Materias y Juegos</span>
+            </li>
+            <li id="menu-progreso" onclick="gameApp.switchTab('progreso')">
+                <svg viewBox="0 0 24 24" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span>Mi Progreso</span>
+            </li>
+            <li id="menu-admin" class="hidden" onclick="gameApp.switchTab('admin-panel')">
+                <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <span>Panel Administrativo</span>
+            </li>
+            <li id="menu-logout" onclick="gameApp.logout()">
+                <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Cerrar Sesión</span>
+            </li>
+        </ul>
+    </sidebar>
+
+    <!-- WRAPPER PRINCIPAL -->
+    <div class="main-wrapper">
+        <header>
+            <div class="header-left">
+                <!-- BOTÓN HAMBURGUESA PARA PANTALLAS MÓVILES -->
+                <button class="mobile-menu-btn" onclick="gameApp.toggleMobileSidebar()" aria-label="Abrir Menú">
+                    <svg viewBox="0 0 24 24" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <div>
+                    <h1>Plataforma de Juegos Educativos</h1>
+                    <p>Universidad Pública de El Alto - Ingeniería de Sistemas</p>
+                </div>
+                <img src="img/upea sistemas.png" alt="Emblema de Ingeniería de Sistemas UPEA" class="header-logo">
+            </div>
+
+            <!-- BOTÓN DE MODO OSCURO / MODO CLARO -->
+            <div class="header-right">
+                <button class="profile-trigger hidden" id="profile-trigger" type="button" onclick="gameApp.openProfile()" aria-label="Editar mi perfil">
+                    <span class="profile-trigger-avatar" id="profile-avatar">U</span>
+                    <span class="profile-trigger-name" id="profile-trigger-name">Mi perfil</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+                </button>
+                <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="gameApp.toggleTheme()" title="Cambiar tema">
+                    <span id="theme-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </span>
+                    <span class="theme-label" id="theme-text">Modo Oscuro</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="container" id="app">
+            
+            <!-- VISTA: LOGIN -->
+            <form id="view-login" class="login-card" onsubmit="event.preventDefault(); gameApp.loginUser()">
+                <img src="img/upea sistemas.png" alt="Emblema de Ingeniería de Sistemas UPEA" class="login-logo">
+                <span class="login-eyebrow">INGENIERÍA DE SISTEMAS · UPEA</span>
+                <h2>Bienvenido</h2>
+                <p class="login-description">Inicie sesión con sus credenciales institucionales</p>
+                
+                <div class="form-group" style="text-align: left;">
+                    <label for="login-correo">Correo electrónico</label>
+                    <input type="email" id="login-correo" class="form-control" placeholder="nombre@upea.bo" autocomplete="username">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label for="login-ru">Contraseña</label>
+                    <input type="password" id="login-ru" class="form-control" placeholder="Ingrese su contraseña" autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-accent login-submit">Ingresar al sistema</button>
+                
+                <div class="login-divider"><span>¿Aún no tiene una cuenta?</span></div>
+
+                <button type="button" class="btn btn-secondary login-register" onclick="gameApp.switchTab('register')">Registrar nuevo estudiante</button>
+            </form>
+
+            <!-- VISTA: REGISTRO -->
+            <div id="view-register" class="hidden" style="max-width: 520px; margin: 20px auto;">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Registro de Estudiante</h2>
+                        <p>Complete sus datos para acceder a las evaluaciones y juegos</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('login')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver al Login</span>
+                    </button>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label for="reg-nombre">Nombre:</label><input type="text" id="reg-nombre" class="form-control" placeholder="Gabriel"></div>
+                    <div class="form-group"><label for="reg-apellido">Apellido:</label><input type="text" id="reg-apellido" class="form-control" placeholder="Quispe Patzy"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="reg-correo">Correo Electrónico:</label><input type="email" id="reg-correo" class="form-control" placeholder="estudiante@upea.bo"></div>
+                    <div class="form-group"><label for="reg-ru">RU (Contraseña):</label><input type="password" id="reg-ru" class="form-control" placeholder="20261234"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="reg-ci">Cédula de Identidad (CI):</label><input type="text" id="reg-ci" class="form-control" placeholder="8374652"></div>
+                    <div class="form-group">
+                        <label for="reg-semestre">Semestre:</label>
+                        <select id="reg-semestre" class="form-control">
+                            <option value="1er Semestre">1er Semestre</option><option value="2do Semestre">2do Semestre</option>
+                            <option value="3er Semestre">3er Semestre</option><option value="4to Semestre">4to Semestre</option>
+                            <option value="5to Semestre">5to Semestre</option><option value="6to Semestre">6to Semestre</option>
+                            <option value="7mo Semestre">7mo Semestre</option><option value="8vo Semestre">8vo Semestre</option>
+                            <option value="9no Semestre">9no Semestre</option><option value="10mo Semestre">10mo Semestre</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-accent" style="width: 100%; margin-top: 15px;" onclick="gameApp.registrarEstudiante()">Registrarse</button>
+            </div>
+
+            <!-- VISTA: INICIO -->
+            <div id="view-inicio" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Panel Principal</h2>
+                        <p>Bienvenido al entorno interactivo de aprendizaje y desafíos</p>
+                    </div>
+                </div>
+                <div style="background: var(--box-bg); padding: 22px; border-radius: 10px; margin-bottom: 24px; line-height: 1.6;">
+                    <p style="margin-bottom: 12px;">En este sistema pondrás a prueba tus conocimientos académicos en dos áreas fundamentales: <strong>Matemáticas</strong> y <strong>Programación</strong>.</p>
+                    <p style="color: var(--text-muted); font-size: 0.92rem;">Cada ronda consta de <strong>10 desafíos</strong> continuos con explicaciones pedagógicas detalladas de cada solución. Todos tus resultados y puntajes quedan registrados automáticamente en tu historial académico.</p>
+                </div>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn btn-accent" style="padding: 12px 24px;" onclick="gameApp.switchTab('materias')">
+                        <span>Comenzar Desafíos</span>
+                    </button>
+                    <button class="btn btn-secondary" style="padding: 12px 24px;" onclick="gameApp.switchTab('progreso')">
+                        <span>Ver Mi Historial</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VISTA: MATERIAS (SOLO DOS OPCIONES: MATEMÁTICAS Y PROGRAMACIÓN) -->
+            <div id="view-materias" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Materias y Juegos</h2>
+                        <p>Selecciona una de las dos áreas académicas para comenzar:</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('inicio')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver al Inicio</span>
+                    </button>
+                </div>
+
+                <div class="menu-grid">
+                    <!-- OPCION 1: MATEMÁTICAS -->
+                    <div class="card-btn" onclick="gameApp.switchTab('matematica-menu')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Matemáticas</h3>
+                                <span class="card-badge">Álgebra & Trigonometría</span>
+                            </div>
+                            <p>Ejercicios conceptuales y prácticos distribuidos en Álgebra Básica y Trigonometría en niveles fácil, medio y difícil.</p>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem; padding: 6px 14px;">Ingresar a Matemáticas &rarr;</span>
+                        </div>
+                    </div>
+
+                    <!-- OPCION 2: PROGRAMACIÓN -->
+                    <div class="card-btn" onclick="gameApp.switchTab('programacion-menu')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Programación</h3>
+                                <span class="card-badge">Python</span>
+                            </div>
+                            <p>Editor de código interactivo con desafíos prácticos en Python organizados en niveles Junior, Senior y Avanzado.</p>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <span class="btn btn-accent" style="font-size: 0.85rem; padding: 6px 14px;">Ingresar a Programación &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: MENÚ DE MATEMÁTICAS (SELECCIÓN DE TEMA) -->
+            <div id="view-matematica-menu" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Matemáticas - Selección de Tema</h2>
+                        <p>Seleccione el tema específico para su ronda de 10 desafíos:</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('materias')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver a Materias</span>
+                    </button>
+                </div>
+                
+                <div class="menu-grid">
+                    <div class="card-btn" onclick="gameApp.startMatematica('algebra')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Álgebra Básica</h3>
+                                <span class="card-badge">Aritmética & Ecuaciones</span>
+                            </div>
+                            <p>Ecuaciones lineales, jerarquía de operaciones, potencias, polinomios, raíces y factorización.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Elegir Dificultad &rarr;</span>
+                        </div>
+                    </div>
+                    <div class="card-btn" onclick="gameApp.startMatematica('trigonometria')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Trigonometría</h3>
+                                <span class="card-badge">Geometría & Ángulos</span>
+                            </div>
+                            <p>Razones trigonométricas, identidades fundamentales, circunferencia unitaria, radianes y triángulos.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Elegir Dificultad &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: MENÚ DE DIFICULTAD MATEMÁTICA -->
+            <div id="view-dificultad-menu" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Matemáticas - Selección de Dificultad</h2>
+                        <p>Elige el nivel de complejidad para la ronda de 10 preguntas:</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('matematica-menu')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver a Temas</span>
+                    </button>
+                </div>
+                
+                <div class="menu-grid">
+                    <div class="card-btn" onclick="gameApp.startMatematicaWithDifficulty('facil')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Nivel Fácil</h3>
+                                <span class="card-badge easy">Introductorio</span>
+                            </div>
+                            <p>Conceptos directos, operaciones elementales y preguntas de diagnóstico rápido.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Iniciar 10 Desafíos &rarr;</span>
+                        </div>
+                    </div>
+                    <div class="card-btn" onclick="gameApp.startMatematicaWithDifficulty('medio')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Nivel Medio</h3>
+                                <span class="card-badge medium">Intermedio</span>
+                            </div>
+                            <p>Problemas con razonamiento algebraico, despeje de incógnitas y aplicación de propiedades.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Iniciar 10 Desafíos &rarr;</span>
+                        </div>
+                    </div>
+                    <div class="card-btn" onclick="gameApp.startMatematicaWithDifficulty('dificil')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Nivel Difícil</h3>
+                                <span class="card-badge hard">Avanzado</span>
+                            </div>
+                            <p>Sistemas de ecuaciones, ecuaciones cuadráticas, identidades pitagóricas y relaciones complejas.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Iniciar 10 Desafíos &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: MENÚ DE PROGRAMACIÓN (JUNIOR, SENIOR Y AVANZADO DENTRO DE PROGRAMACIÓN) -->
+            <div id="view-programacion-menu" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Programación - Selección de Nivel</h2>
+                        <p>Seleccione la modalidad de retos en código Python (10 desafíos prácticos):</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('materias')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver a Materias</span>
+                    </button>
+                </div>
+                
+                <div class="menu-grid">
+                    <!-- JUNIOR -->
+                    <div class="card-btn" onclick="gameApp.startProgramacion('junior')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Nivel Junior</h3>
+                                <span class="card-badge easy">Fundamentos</span>
+                            </div>
+                            <p>Sintaxis fundamental de Python: impresión con print(), asignación de variables, operaciones aritméticas y tipos de datos.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Iniciar Reto Junior &rarr;</span>
+                        </div>
+                    </div>
+
+                    <!-- SENIOR -->
+                    <div class="card-btn" onclick="gameApp.startProgramacion('senior')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Nivel Senior</h3>
+                                <span class="card-badge medium">Lógica & Funciones</span>
+                            </div>
+                            <p>Estructuras de control condicionales (if/else), bucles for y while, funciones con retorno, listas y diccionarios.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Iniciar Reto Senior &rarr;</span>
+                        </div>
+                    </div>
+
+                    <!-- AVANZADO -->
+                    <div class="card-btn" onclick="gameApp.startProgramacion('avanzado')">
+                        <div>
+                            <div class="card-btn-header">
+                                <h3>Nivel Avanzado</h3>
+                                <span class="card-badge hard">POO & Algoritmos</span>
+                            </div>
+                            <p>Programación Orientada a Objetos (POO), constructores __init__, herencia, polimorfismo, lambdas y comprensión de listas.</p>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <span class="btn btn-secondary" style="font-size: 0.85rem;">Iniciar Reto Avanzado &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: MI PROGRESO -->
+            <div id="view-progreso" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <h2>Mi Progreso Académico</h2>
+                        <p>Registro histórico de rondas completadas y calificaciones obtenidas</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('inicio')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver al Inicio</span>
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-data">
+                        <thead>
+                            <tr>
+                                <th>Materia y Modalidad</th>
+                                <th>Puntaje Obtenido</th>
+                                <th>Estado</th>
+                                <th>Fecha y Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progreso-body">
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando registros...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VISTA: PANEL ADMIN (ESTUDIANTES REGISTRADOS) -->
+            <div id="view-admin-panel" class="hidden">
+                <div class="view-header">
+                    <div class="view-header-title">
+                        <span class="admin-eyebrow">GESTIÓN INSTITUCIONAL</span>
+                        <h2>Administración de estudiantes</h2>
+                        <p>Administre los registros de estudiantes de Ingeniería de Sistemas.</p>
+                    </div>
+                    <button class="btn-back" onclick="gameApp.switchTab('inicio')">
+                        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Volver al inicio</span>
+                    </button>
+                </div>
+                <div class="admin-toolbar">
+                    <div class="admin-summary">
+                        <span class="admin-summary-number" id="admin-student-count">0</span>
+                        <span>estudiantes registrados</span>
+                    </div>
+                    <div class="admin-toolbar-actions">
+                        <label class="admin-search">
+                            <span class="sr-only">Buscar estudiantes</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                            <input type="search" id="admin-search" placeholder="Buscar estudiante..." oninput="gameApp.filterAdminStudents()">
+                        </label>
+                        <button class="btn btn-accent" onclick="gameApp.openStudentForm()">
+                            <span aria-hidden="true">+</span> Nuevo estudiante
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-data">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Estudiante</th>
+                                <th>Correo institucional</th>
+                                <th>RU</th>
+                                <th>Semestre</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-body">
+                            <tr><td colspan="7" class="table-message">Cargando estudiantes...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-backdrop hidden" id="student-modal" role="presentation" onclick="if (event.target === this) gameApp.closeStudentForm()">
+                <section class="student-modal" role="dialog" aria-modal="true" aria-labelledby="student-modal-title">
+                    <div class="student-modal-header">
+                        <div>
+                            <span class="admin-eyebrow">REGISTRO ACADÉMICO</span>
+                            <h2 id="student-modal-title">Nuevo estudiante</h2>
+                            <p>Complete la información institucional del estudiante.</p>
+                        </div>
+                        <button type="button" class="modal-close" aria-label="Cerrar" onclick="gameApp.closeStudentForm()">×</button>
+                    </div>
+                    <form id="admin-student-form" onsubmit="gameApp.saveAdminStudent(event)">
+                        <input type="hidden" id="admin-student-id">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="admin-student-name">Nombre</label>
+                                <input type="text" id="admin-student-name" class="form-control" maxlength="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin-student-surname">Apellido</label>
+                                <input type="text" id="admin-student-surname" class="form-control" maxlength="50" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="admin-student-email">Correo institucional</label>
+                                <input type="email" id="admin-student-email" class="form-control" maxlength="100" placeholder="estudiante@upea.bo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin-student-ru">RU / Contraseña</label>
+                                <input type="text" id="admin-student-ru" class="form-control" maxlength="20" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="admin-student-ci">Cédula de identidad</label>
+                                <input type="text" id="admin-student-ci" class="form-control" maxlength="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin-student-semester">Semestre</label>
+                                <select id="admin-student-semester" class="form-control" required>
+                                    <option value="">Seleccione un semestre</option>
+                                    <option>1er Semestre</option><option>2do Semestre</option>
+                                    <option>3er Semestre</option><option>4to Semestre</option>
+                                    <option>5to Semestre</option><option>6to Semestre</option>
+                                    <option>7mo Semestre</option><option>8vo Semestre</option>
+                                    <option>9no Semestre</option><option>10mo Semestre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="student-modal-actions">
+                            <button type="button" class="btn btn-secondary" onclick="gameApp.closeStudentForm()">Cancelar</button>
+                            <button type="submit" class="btn btn-accent" id="admin-student-submit">Guardar estudiante</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <div class="modal-backdrop hidden" id="profile-modal" role="presentation" onclick="if (event.target === this) gameApp.closeProfile()">
+                <section class="student-modal profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+                    <div class="student-modal-header">
+                        <div>
+                            <span class="admin-eyebrow">CUENTA INSTITUCIONAL</span>
+                            <h2 id="profile-modal-title">Mi perfil</h2>
+                            <p>Actualice su información personal y credenciales de acceso.</p>
+                        </div>
+                        <button type="button" class="modal-close" aria-label="Cerrar" onclick="gameApp.closeProfile()">×</button>
+                    </div>
+                    <form id="profile-form" onsubmit="gameApp.saveProfile(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-name">Nombre</label>
+                                <input type="text" id="profile-name" class="form-control" maxlength="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-surname">Apellido</label>
+                                <input type="text" id="profile-surname" class="form-control" maxlength="50" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-email">Correo electrónico</label>
+                                <input type="email" id="profile-email" class="form-control" maxlength="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-ru">Registro Universitario (RU)</label>
+                                <input type="text" id="profile-ru" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-ci">Cédula de identidad</label>
+                                <input type="text" id="profile-ci" class="form-control" maxlength="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-semester">Semestre</label>
+                                <select id="profile-semester" class="form-control" required>
+                                    <option value="">Seleccione un semestre</option>
+                                    <option>1er Semestre</option><option>2do Semestre</option>
+                                    <option>3er Semestre</option><option>4to Semestre</option>
+                                    <option>5to Semestre</option><option>6to Semestre</option>
+                                    <option>7mo Semestre</option><option>8vo Semestre</option>
+                                    <option>9no Semestre</option><option>10mo Semestre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="profile-password-section">
+                            <h3>Seguridad de la cuenta</h3>
+                            <p>Para guardar cambios, confirme su contraseña actual. Deje la nueva contraseña vacía si no desea cambiarla.</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-current-password">Contraseña actual</label>
+                                    <input type="password" id="profile-current-password" class="form-control" autocomplete="current-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-new-password">Nueva contraseña <span class="optional-label">(opcional)</span></label>
+                                    <input type="password" id="profile-new-password" class="form-control" minlength="6" autocomplete="new-password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-confirm-password">Confirmar nueva contraseña</label>
+                                <input type="password" id="profile-confirm-password" class="form-control" minlength="6" autocomplete="new-password">
+                            </div>
+                        </div>
+                        <div class="student-modal-actions">
+                            <button type="button" class="btn btn-secondary" onclick="gameApp.closeProfile()">Cancelar</button>
+                            <button type="submit" class="btn btn-accent" id="profile-submit">Guardar cambios</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!-- VISTA: JUEGO / DESAFÍO EN CURSO -->
+            <div id="view-game" class="hidden">
+                <div class="game-header">
+                    <div>
+                        <h3 id="category-title" style="color: var(--primary);">Materia</h3>
+                        <span id="level-indicator" style="font-size: 0.88rem; color: var(--text-muted);">Desafío 1 de 10</span>
+                    </div>
+                    <div class="score-badge">
+                        Puntaje: <span id="score">0</span> / 100 pts
+                    </div>
+                </div>
+
+                <div class="question-box" id="question-text">Cargando desafío...</div>
+
+                <!-- CONTENEDOR DE OPCIONES (PARA MATEMÁTICAS) O EDITOR (PARA PROGRAMACIÓN) -->
+                <div id="options-container"></div>
+
+                <!-- CAJA DE EXPLICACIÓN DIDÁCTICA (RESULTADO Y EXPLICACIÓN DE RESPUESTA) -->
+                <div id="explanation-container" class="hidden"></div>
+
+                <!-- BOTONES DE NAVEGACIÓN DENTRO DEL JUEGO -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="gameApp.exitGamePrompt()">
+                        <span>Abandonar Reto</span>
+                    </button>
+                    <button id="next-btn" class="btn btn-accent hidden" onclick="gameApp.nextLevel()">
+                        <span>Siguiente Desafío &rarr;</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VISTA: FIN DE JUEGO (RETO CONCLUIDO) -->
+            <div id="view-game-over" class="hidden" style="text-align: center; padding: 20px 10px;">
+                <h2 style="color: var(--primary); margin-bottom: 12px; font-size: 1.5rem;">Ronda Finalizada</h2>
+                <p style="color: var(--text-muted); margin-bottom: 24px;">Has completado los 10 desafíos de esta sesión.</p>
+                
+                <div style="background: var(--box-bg); max-width: 320px; margin: 0 auto 30px; padding: 24px; border-radius: 12px; border: 2px solid var(--border);">
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px;">Puntaje Final Acumulado</div>
+                    <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);"><span id="final-score">0</span> / 100 pts</div>
+                    <div id="final-message" style="margin-top: 10px; font-weight: 600; font-size: 0.92rem;">Rendimiento sobresaliente</div>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn btn-accent" onclick="gameApp.switchTab('progreso')">
+                        <span>Ver Historial de Progreso</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="gameApp.switchTab('materias')">
+                        <span>Elegir Otra Materia</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="gameApp.switchTab('inicio')">
+                        <span>Volver al Inicio</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            Desarrollado por: Mendoza Cielo | Mamani Genaro | Quispe Gabriel
+        </footer>
+    </div>
+
+    <script src="js/codemirror.min.js"></script>
+    <script src="js/codemirror-python.min.js"></script>
+    <script src="js/codemirror-closebrackets.min.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
